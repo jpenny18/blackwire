@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
 import PromoPricingCards from '../components/PromoPricingCards';
+import FeedbackVote from '../components/FeedbackVote';
+import SignupCounter from '../components/SignupCounter';
 
 export default function HomePage() {
   return (
@@ -61,6 +63,11 @@ export default function HomePage() {
               Join Discord
             </a>
           </div>
+
+          {/* Live Signup Counter */}
+          <div className="flex justify-center">
+            <SignupCounter />
+          </div>
         </div>
       </section>
 
@@ -71,6 +78,13 @@ export default function HomePage() {
           <p className="text-gray-400 text-lg">Select the model that fits your trading style</p>
         </div>
         <PromoPricingCards />
+      </section>
+
+      {/* Feedback Vote Section */}
+      <section className="relative z-10 py-16 px-4">
+        <div className="container max-w-4xl mx-auto">
+          <FeedbackVote />
+        </div>
       </section>
 
       {/* Why We Built This */}
