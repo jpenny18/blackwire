@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
   User
 } from 'firebase/auth';
-import { getFirestore, collection, addDoc, serverTimestamp, getDocs, doc, setDoc, query, where } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs, doc, setDoc, query, where, Timestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -94,6 +94,7 @@ const getVoteCounts = async () => {
 };
 
 export { 
+  app,  // Export for crypto checkout compatibility
   auth, 
   db, 
   signIn, 
@@ -103,5 +104,6 @@ export {
   submitFeedbackVote,
   getUserCount,
   getVoteCounts,
+  Timestamp,  // Export for crypto checkout compatibility
   type User 
 };

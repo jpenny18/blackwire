@@ -81,7 +81,7 @@ export default function HomePage() {
       </section>
 
       {/* Feedback Vote Section */}
-      <section className="relative z-10 py-16 px-4">
+      <section className="relative z-10 py-16 px-4 hidden">
         <div className="container max-w-4xl mx-auto">
           <FeedbackVote />
         </div>
@@ -281,8 +281,8 @@ export default function HomePage() {
                 <div>
                   <h3 className="text-xl font-semibold mb-2">First Payout Caps</h3>
                   <div className="text-gray-400 space-y-1">
-                    <p><span className="text-cyan-400 font-semibold">Blackwire Standard:</span> Core $1,500 | Pro $2,500 | Elite $5,000 | Institutional (no cap)</p>
-                    <p><span className="text-cyan-400 font-semibold">Blackwire VIP:</span> Core $1,500 | Pro $2,500 | Elite $7,500 | Institutional (no cap)</p>
+                    <p><span className="text-cyan-400 font-semibold">Blackwire Standard:</span> Core $5,000 | Pro $5,000 | Elite $5,000 | Institutional (no cap)</p>
+                    <p><span className="text-cyan-400 font-semibold">Blackwire VIP:</span> Core $5,000 | Pro $5,000 | Elite $7,500 | Institutional (no cap)</p>
                   </div>
                 </div>
               </div>

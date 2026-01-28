@@ -21,7 +21,7 @@ const challengeConfigs: { [key: string]: ChallengeConfig } = {
     maxDailyLoss: "5-6%",
     maxLoss: "10-12%",
     profitSplit: "70% → 90%",
-    firstPayoutCap: { 300000: "None", 200000: "$5,000", 100000: "$2,500", 50000: "$1,500" },
+    firstPayoutCap: { 300000: "None", 200000: "$5,000", 100000: "$5,000", 50000: "$5,000" },
     tierNames: { 300000: "Institutional", 200000: "Elite", 100000: "Pro", 50000: "Core" }
   },
   vip: {
@@ -31,7 +31,7 @@ const challengeConfigs: { [key: string]: ChallengeConfig } = {
     maxDailyLoss: "None",
     maxLoss: "10-15%",
     profitSplit: "50% → 90%",
-    firstPayoutCap: { 200000: "None", 100000: "$7,500", 50000: "$2,500", 25000: "$1,500" },
+    firstPayoutCap: { 200000: "None", 100000: "$7,500", 50000: "$5,000", 25000: "$5,000" },
     tierNames: { 200000: "Institutional", 100000: "Elite", 50000: "Pro", 25000: "Core" }
   }
 };
@@ -81,11 +81,14 @@ export default function PromoPricingCards() {
   const handlePurchase = (account: number) => {
     const challengeType = currentPlan === 'standard' ? 'Blackwire Standard' : 'Blackwire VIP';
     const tierName = config.tierNames[account];
+    const price = config.prices[account];
     
     sessionStorage.setItem('preselectedChallengeType', challengeType);
     sessionStorage.setItem('preselectedTier', tierName);
     sessionStorage.setItem('preselectedBalance', account.toString());
-    router.push('/auth');
+    
+    // Redirect to crypto payment page with challenge details
+    router.push(`/challenge/payment?type=${encodeURIComponent(challengeType)}&tier=${encodeURIComponent(tierName)}&balance=${account}&price=${price}`);
   };
 
   const features = [

@@ -108,8 +108,8 @@ export default function AuthSuccess() {
         {/* Additional Info */}
         <p className="text-center text-gray-500 text-xs mt-6">
           Questions? Contact us at{' '}
-          <a href="mailto:support@blackwire.vip" className="text-cyan-400 hover:underline">
-            support@blackwire.vip
+          <a href="mailto:support@blackwiretrading.vip" className="text-cyan-400 hover:underline">
+            support@blackwiretrading.vip
           </a>
         </p>
       </div>
