@@ -14,7 +14,18 @@ export default function CryptoPendingPage() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 pt-20 pb-16">
+      {/* Header */}
+      <header className="relative z-20 border-b border-white/10 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-center">
+            <a href="/" className="text-xl font-bold tracking-tight text-center hover:opacity-80 transition-opacity">
+              BLACKWIRE<span className="text-cyan-400">.VIP</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 pt-12 pb-16">
         {/* Success Icon */}
         <div className="mx-auto w-24 h-24 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-full flex items-center justify-center mb-8">
           <svg className="w-12 h-12 text-black" fill="currentColor" viewBox="0 0 20 20">
@@ -23,7 +34,7 @@ export default function CryptoPendingPage() {
         </div>
         
         <h1 className="text-4xl md:text-6xl font-bold text-cyan-400 mb-6 text-center">
-          Payment Verifying...
+          Payment Pending...
         </h1>
         
         <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8 text-center">

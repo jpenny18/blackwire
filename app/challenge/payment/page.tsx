@@ -127,6 +127,17 @@ function ChallengeCryptoPaymentContent() {
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
         </div>
+
+        {/* Header */}
+        <header className="relative z-20 border-b border-white/10 backdrop-blur-sm">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex justify-center">
+              <a href="/" className="text-xl font-bold tracking-tight text-center hover:opacity-80 transition-opacity">
+                BLACKWIRE<span className="text-cyan-400">.VIP</span>
+              </a>
+            </div>
+          </div>
+        </header>
         
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
@@ -170,6 +181,17 @@ function ChallengeCryptoPaymentContent() {
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
       </div>
+
+      {/* Header */}
+      <header className="relative z-20 border-b border-white/10 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-center">
+            <a href="/" className="text-xl font-bold tracking-tight text-center hover:opacity-80 transition-opacity">
+              BLACKWIRE<span className="text-cyan-400">.VIP</span>
+            </a>
+          </div>
+        </div>
+      </header>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
         <div className="text-center mb-12">

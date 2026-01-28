@@ -152,110 +152,116 @@ export default function CryptoPayment({ challengeData, successRedirectPath, onPr
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 md:p-8 space-y-6">
       {/* Crypto Selection */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {(['BTC', 'ETH', 'USDT', 'USDC'] as const).map((crypto) => (
-          <button
-            key={crypto}
-            onClick={() => handleCryptoSelect(crypto)}
-            className={`p-4 rounded-xl border ${
-              selectedCrypto === crypto
-                ? 'border-[#0FF1CE] bg-[#0FF1CE]/10'
-                : 'border-[#2F2F2F]/50 hover:border-[#0FF1CE]/50'
-            } transition-colors`}
-          >
-            <div className="text-center">
-              <div className="font-medium">
-                {crypto}
+      <div>
+        <h3 className="text-lg font-semibold text-white mb-4">Select Payment Method</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {(['BTC', 'ETH', 'USDT', 'USDC'] as const).map((crypto) => (
+            <button
+              key={crypto}
+              onClick={() => handleCryptoSelect(crypto)}
+              className={`p-4 rounded-xl border transition-all duration-300 ${
+                selectedCrypto === crypto
+                  ? 'border-cyan-400 bg-cyan-400/10 scale-105'
+                  : 'border-white/10 bg-white/5 hover:border-cyan-400/50 hover:bg-white/10'
+              }`}
+            >
+              <div className="text-center">
+                <div className={`font-bold ${selectedCrypto === crypto ? 'text-cyan-400' : 'text-white'}`}>
+                  {crypto}
+                </div>
+                {crypto === 'USDT' && (
+                  <div className="text-xs text-gray-400 mt-1">
+                    (TRC20)
+                  </div>
+                )}
+                {crypto === 'USDC' && (
+                  <div className="text-xs text-gray-400 mt-1">
+                    (SOL)
+                  </div>
+                )}
               </div>
-              {crypto === 'USDT' && (
-                <div className="text-xs text-gray-400">
-                  (TRC20)
-                </div>
-              )}
-              {crypto === 'USDC' && (
-                <div className="text-xs text-gray-400">
-                  (SOL)
-                </div>
-              )}
-            </div>
-          </button>
-        ))}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="bg-[#151515] rounded-xl p-4 border border-[#2F2F2F]/50">
-        <div className="text-center mb-4">
-          <div className="text-lg font-medium">
+      <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+        <div className="text-center mb-3">
+          <div className="text-lg font-medium text-white">
             1 {selectedCrypto} = ${cryptoPrices[selectedCrypto].toLocaleString()}
           </div>
         </div>
         
-        <div className="text-orange-500 text-sm text-center">
+        <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3 text-orange-400 text-sm text-center">
           {selectedCrypto === 'BTC' && 
-            "Only send Bitcoin (BTC) assets to this address. Other assets will be lost forever."
+            "⚠️ Only send Bitcoin (BTC) assets to this address. Other assets will be lost forever."
           }
           {selectedCrypto === 'ETH' &&
-            "Only send Ethereum (ETH) assets to this address. Other assets will be lost forever."
+            "⚠️ Only send Ethereum (ETH) assets to this address. Other assets will be lost forever."
           }
           {selectedCrypto === 'USDT' &&
-            "Only send Tether (TRC20) assets to this address. Other assets will be lost forever."
+            "⚠️ Only send Tether (TRC20) assets to this address. Other assets will be lost forever."
           }
           {selectedCrypto === 'USDC' &&
-            "Only send USD Coin (SPL) assets to this address. Other assets will be lost forever."
+            "⚠️ Only send USD Coin (SPL) assets to this address. Other assets will be lost forever."
           }
         </div>
       </div>
 
       {/* Payment Details */}
       <div className="space-y-4">
-        <div className="bg-[#151515] rounded-xl p-4 border border-[#2F2F2F]/50">
-          <div className="text-center mb-4">
-            <div className="text-sm text-gray-400 mb-1">Send exactly</div>
-            <div className="text-2xl font-bold text-[#0FF1CE]">
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+          <h3 className="text-lg font-semibold text-white mb-4 text-center">Payment Amount</h3>
+          <div className="text-center mb-6">
+            <div className="text-sm text-gray-400 mb-2">Send exactly</div>
+            <div className="text-3xl md:text-4xl font-bold text-cyan-400">
               {cryptoAmount[selectedCrypto].toFixed(selectedCrypto === 'USDC' || selectedCrypto === 'USDT' ? 2 : 8)} {selectedCrypto}
             </div>
-            <div className="text-sm text-gray-400 mt-1">
-              ≈ ${challengeData.price.toFixed(2)}
+            <div className="text-sm text-gray-400 mt-2">
+              ≈ ${challengeData.price.toFixed(2)} USD
             </div>
           </div>
 
-          <div className="flex justify-center mb-4">
-            <QRCodeSVG
-              value={
-                selectedCrypto === 'USDT' 
-                  ? `tron:${CRYPTO_ADDRESSES[selectedCrypto]}?amount=${cryptoAmount[selectedCrypto].toFixed(2)}`
-                  : selectedCrypto === 'USDC'
-                  ? `solana:${CRYPTO_ADDRESSES[selectedCrypto]}?amount=${(cryptoAmount[selectedCrypto] / 1000).toFixed(2)}&spl-token=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
-                  : selectedCrypto === 'BTC'
-                  ? `bitcoin:${CRYPTO_ADDRESSES[selectedCrypto]}?amount=${cryptoAmount[selectedCrypto].toFixed(8)}`
-                  : `ethereum:${CRYPTO_ADDRESSES[selectedCrypto]}?value=${(cryptoAmount[selectedCrypto] * 1e18).toFixed(0)}`
-              }
-              size={200}
-              level="H"
-              className="p-2 bg-white rounded-xl"
-            />
+          <div className="flex justify-center mb-6">
+            <div className="p-4 bg-white rounded-xl shadow-lg">
+              <QRCodeSVG
+                value={
+                  selectedCrypto === 'USDT' 
+                    ? `tron:${CRYPTO_ADDRESSES[selectedCrypto]}?amount=${cryptoAmount[selectedCrypto].toFixed(2)}`
+                    : selectedCrypto === 'USDC'
+                    ? `solana:${CRYPTO_ADDRESSES[selectedCrypto]}?amount=${(cryptoAmount[selectedCrypto] / 1000).toFixed(2)}&spl-token=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
+                    : selectedCrypto === 'BTC'
+                    ? `bitcoin:${CRYPTO_ADDRESSES[selectedCrypto]}?amount=${cryptoAmount[selectedCrypto].toFixed(8)}`
+                    : `ethereum:${CRYPTO_ADDRESSES[selectedCrypto]}?value=${(cryptoAmount[selectedCrypto] * 1e18).toFixed(0)}`
+                }
+                size={200}
+                level="H"
+              />
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-[#1A1A1A] rounded-lg p-3">
-            <div className="flex-1 font-mono text-sm truncate">
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg p-4">
+            <div className="flex-1 font-mono text-sm text-white truncate">
               {CRYPTO_ADDRESSES[selectedCrypto]}
             </div>
             <button
               onClick={copyAddress}
-              className="flex items-center gap-1 text-[#0FF1CE] hover:text-[#0FF1CE]/80"
+              className="flex items-center gap-2 px-3 py-2 bg-cyan-400 hover:bg-cyan-500 text-black rounded-lg transition-colors font-medium text-sm"
             >
               {copied ? <Check size={16} /> : <Copy size={16} />}
-              <span className="text-sm">{copied ? 'Copied!' : 'Copy'}</span>
+              <span>{copied ? 'Copied!' : 'Copy'}</span>
             </button>
           </div>
         </div>
 
         {/* Verification Phrase */}
-        <div className="bg-[#151515] rounded-xl p-4 border border-[#2F2F2F]/50">
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+          <h3 className="text-lg font-semibold text-white mb-4">Verification Phrase</h3>
           <div className="mb-4">
-            <div className="text-sm text-gray-400 mb-2">Type this phrase to verify:</div>
-            <div className="font-mono bg-[#1A1A1A] p-3 rounded-lg text-[#0FF1CE] text-sm">
+            <div className="text-sm text-gray-400 mb-3">Type this phrase exactly to confirm payment:</div>
+            <div className="font-mono bg-cyan-400/10 border border-cyan-400/30 p-4 rounded-lg text-cyan-400 text-center font-semibold">
               {verificationPhrase.join(' ')}
             </div>
           </div>
@@ -266,19 +272,23 @@ export default function CryptoPayment({ challengeData, successRedirectPath, onPr
             onChange={(e) => setUserPhrase(e.target.value)}
             onPaste={(e) => e.preventDefault()}
             placeholder="Type the verification phrase here"
-            className="w-full bg-[#1A1A1A] border border-[#2F2F2F]/50 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#0FF1CE]/50"
+            className="w-full bg-white/5 border border-white/10 rounded-lg p-4 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition-colors"
           />
-          {error && <div className="text-red-400 text-sm mt-2">{error}</div>}
+          {error && (
+            <div className="mt-3 bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
         </div>
 
         <button
           onClick={handleSubmit}
           disabled={isLoading || userPhrase.toLowerCase() !== verificationPhrase.join(' ').toLowerCase()}
-          className="w-full bg-[#0FF1CE] hover:bg-[#0FF1CE]/90 disabled:bg-[#0FF1CE]/50 disabled:cursor-not-allowed text-black font-medium py-4 rounded-xl transition-colors"
+          className="w-full bg-cyan-400 hover:bg-cyan-500 disabled:bg-cyan-400/50 disabled:cursor-not-allowed text-black font-bold py-4 rounded-xl transition-all duration-300 hover:scale-105 disabled:hover:scale-100"
         >
           {isLoading ? (
             <div className="flex items-center justify-center gap-2">
-              <RefreshCw className="animate-spin" size={16} />
+              <RefreshCw className="animate-spin" size={20} />
               <span>Processing...</span>
             </div>
           ) : (
@@ -287,13 +297,17 @@ export default function CryptoPayment({ challengeData, successRedirectPath, onPr
         </button>
       </div>
 
-      <div className="text-sm text-gray-400">
-        <p className="mb-2">
-          • The payment amount is locked in for 15 minutes. If you don't send the payment within this time, the price may be updated.
-        </p>
-        <p>
-          • After sending the payment, click the button above and wait for confirmation. This may take up to 30 minutes depending on network conditions.
-        </p>
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+        <div className="text-sm text-gray-400 space-y-2">
+          <p className="flex items-start gap-2">
+            <span className="text-cyan-400 font-bold">•</span>
+            <span>The payment amount is locked in for 15 minutes. If you don't send the payment within this time, the price may be updated.</span>
+          </p>
+          <p className="flex items-start gap-2">
+            <span className="text-cyan-400 font-bold">•</span>
+            <span>After sending the payment, click the button above and wait for confirmation. This may take up to 30 minutes depending on network conditions.</span>
+          </p>
+        </div>
       </div>
     </div>
   );
