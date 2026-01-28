@@ -207,12 +207,15 @@ export default function CryptoOrdersPage() {
   });
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 min-h-screen">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-white">Crypto Orders</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Crypto Orders Management</h1>
+          <p className="text-gray-400 text-sm mt-1">Monitor and manage all cryptocurrency orders</p>
+        </div>
         <button
           onClick={() => setLoading(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#0FF1CE]/10 hover:bg-[#0FF1CE]/20 text-[#0FF1CE] rounded-lg"
+          className="flex items-center gap-2 px-4 py-2 bg-[#0FF1CE]/10 hover:bg-[#0FF1CE]/20 text-[#0FF1CE] rounded-lg transition-colors"
         >
           <RefreshCw size={16} />
           <span>Refresh</span>
