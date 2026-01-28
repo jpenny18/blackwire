@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CryptoPayment from '@/components/CryptoPayment';
 
@@ -21,7 +21,7 @@ interface FormData {
   discordUsername?: string;
 }
 
-export default function ChallengeCryptoPaymentPage() {
+function ChallengeCryptoPaymentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -323,5 +323,20 @@ export default function ChallengeCryptoPaymentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ChallengeCryptoPaymentPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading payment page...</p>
+        </div>
+      </div>
+    }>
+      <ChallengeCryptoPaymentContent />
+    </Suspense>
   );
 }
