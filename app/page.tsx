@@ -6,7 +6,7 @@ import SignupCounter from '../components/SignupCounter';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white scroll-smooth">
       {/* Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -49,10 +49,10 @@ export default function HomePage() {
           {/* CTA Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
             <a
-              href="/auth"
+              href="#pricing"
               className="inline-block bg-cyan-400 hover:bg-cyan-500 text-black font-bold px-8 py-3 rounded-lg text-lg transition-all duration-300 hover:scale-105"
             >
-              Get Early Access
+              Get Funded Now
             </a>
             <a
               href="https://discord.gg/AKsDMBvQBT"
@@ -72,7 +72,7 @@ export default function HomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="relative z-10 py-16 px-4">
+      <section id="pricing" className="relative z-10 py-16 px-4 scroll-mt-20">
         <div className="container mx-auto mb-12 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Choose Your Allocation</h2>
           <p className="text-gray-400 text-lg">Select the model that fits your trading style</p>
@@ -318,13 +318,13 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="relative z-10 py-20 px-4">
         <div className="container max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Be First When We Launch</h2>
-          <p className="text-xl text-gray-400 mb-8">Sign up now to get notified the moment Blackwire goes live.</p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Trade?</h2>
+          <p className="text-xl text-gray-400 mb-8">Get your direct funded account today. No evaluation. No waiting.</p>
           <a 
-            href="/auth" 
+            href="#pricing" 
             className="inline-block bg-cyan-400 hover:bg-cyan-500 text-black font-bold px-12 py-4 rounded-lg text-lg transition-all duration-300 hover:scale-105"
           >
-            Get Early Access
+            Get Funded Now
           </a>
         </div>
       </section>

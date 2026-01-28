@@ -43,7 +43,7 @@ export default function SignupCounter() {
           ) : (
             <>
               <span className="text-cyan-400 font-bold text-lg">{count}</span>
-              <span className="ml-1">traders signed up</span>
+              <span className="ml-1">Traders Signed Up</span>
             </>
           )}
         </span>
