@@ -89,12 +89,12 @@ export default function HomePage() {
       <section id="pricing" className="relative z-10 py-16 px-4 scroll-mt-20">
         <div className="container mx-auto mb-8 text-center">
           {/* Urgency Tag */}
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 backdrop-blur-sm border border-orange-500/50 rounded-full px-6 py-3 mb-8">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 backdrop-blur-sm border border-orange-500/50 rounded-full px-6 py-3 mb-8 hidden">
             <div className="relative">
               <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
               <div className="absolute inset-0 w-2 h-2 bg-orange-500 rounded-full animate-ping"></div>
             </div>
-            <div className="text-left">
+            <div className="text-left hidden">
               <div className="text-orange-400 font-bold text-sm md:text-base">Launch Window: First 10 Allocations Only</div>
               <div className="text-orange-300 text-xs">After that: prices increase & access pauses</div>
             </div>
