@@ -21,6 +21,8 @@ interface FormData {
   discordUsername?: string;
 }
 
+type PaymentMethodType = 'crypto' | 'card' | null;
+
 function ChallengeCryptoPaymentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,6 +30,7 @@ function ChallengeCryptoPaymentContent() {
   const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice>({ BTC: 0, ETH: 0, USDT: 1, USDC: 1 });
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType>(null);
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -62,6 +65,30 @@ function ChallengeCryptoPaymentContent() {
   };
 
   const price = priceParam ? parseInt(priceParam) : (priceMap[challengeType]?.[balance] || 999);
+
+  // Check if this account size is eligible for card payment
+  const isCardPaymentEligible = () => {
+    const balanceNum = parseInt(balance);
+    if (challengeType === 'Blackwire Standard') {
+      return balanceNum === 50000 || balanceNum === 100000;
+    } else if (challengeType === 'Blackwire VIP') {
+      return balanceNum === 25000 || balanceNum === 50000;
+    }
+    return false;
+  };
+
+  // Get Whop checkout link based on challenge type and balance
+  const getWhopCheckoutLink = () => {
+    const balanceNum = parseInt(balance);
+    if (challengeType === 'Blackwire Standard') {
+      if (balanceNum === 50000) return 'https://whop.com/checkout/plan_HM9n7mLWCP8qw';
+      if (balanceNum === 100000) return 'https://whop.com/checkout/plan_9qTe4xo8gVTl4';
+    } else if (challengeType === 'Blackwire VIP') {
+      if (balanceNum === 25000) return 'https://whop.com/checkout/plan_rnI3Toq7S4Ydn';
+      if (balanceNum === 50000) return 'https://whop.com/checkout/plan_OMTCt8Wnax3vA';
+    }
+    return null;
+  };
 
   // Fetch crypto prices
   useEffect(() => {
@@ -103,10 +130,48 @@ function ChallengeCryptoPaymentContent() {
     }
   };
 
-  const handleProceedToPayment = () => {
+  const handleProceedToPayment = async () => {
     if (validateForm()) {
-      setShowPayment(true);
+      if (selectedPaymentMethod === 'card') {
+        // Save order to Firebase first
+        try {
+          setIsProcessingPayment(true);
+          const response = await fetch('/api/card/submit-order', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              challengeData: getChallengeData(),
+              paymentMethod: 'card'
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to save order');
+          }
+
+          const data = await response.json();
+          console.log('Order saved:', data.orderId);
+
+          // Redirect to Whop checkout
+          const whopLink = getWhopCheckoutLink();
+          if (whopLink) {
+            window.location.href = whopLink;
+          }
+        } catch (error) {
+          console.error('Error saving order:', error);
+          alert('Failed to process order. Please try again.');
+          setIsProcessingPayment(false);
+        }
+      } else if (selectedPaymentMethod === 'crypto') {
+        setShowPayment(true);
+      }
     }
+  };
+
+  const handlePaymentMethodSelection = (method: PaymentMethodType) => {
+    setSelectedPaymentMethod(method);
   };
 
   const getChallengeData = () => {
@@ -334,12 +399,76 @@ function ChallengeCryptoPaymentContent() {
                 </div>
               </div>
 
-              <button
-                onClick={handleProceedToPayment}
-                className="w-full bg-cyan-400 hover:bg-cyan-500 text-black font-bold py-4 rounded-xl transition-all duration-300 hover:scale-105"
-              >
-                Proceed to Crypto Payment
-              </button>
+              {/* Payment Method Selection */}
+              {isCardPaymentEligible() ? (
+                <>
+                  <div className="mb-4">
+                    <label className="block text-white mb-3 font-semibold">Select Payment Method</label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        onClick={() => handlePaymentMethodSelection('card')}
+                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                          selectedPaymentMethod === 'card'
+                            ? 'border-cyan-400 bg-cyan-400/10'
+                            : 'border-white/10 bg-white/5 hover:border-cyan-400/50'
+                        }`}
+                      >
+                        <div className="flex flex-col items-center gap-2">
+                          <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                          </svg>
+                          <span className="text-white font-semibold">Credit/Debit Card</span>
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={() => handlePaymentMethodSelection('crypto')}
+                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                          selectedPaymentMethod === 'crypto'
+                            ? 'border-cyan-400 bg-cyan-400/10'
+                            : 'border-white/10 bg-white/5 hover:border-cyan-400/50'
+                        }`}
+                      >
+                        <div className="flex flex-col items-center gap-2">
+                          <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-white font-semibold">Cryptocurrency</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleProceedToPayment}
+                    disabled={!selectedPaymentMethod || isProcessingPayment}
+                    className={`w-full font-bold py-4 rounded-xl transition-all duration-300 ${
+                      selectedPaymentMethod && !isProcessingPayment
+                        ? 'bg-cyan-400 hover:bg-cyan-500 text-black hover:scale-105'
+                        : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                    }`}
+                  >
+                    {isProcessingPayment ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Processing...</span>
+                      </div>
+                    ) : (
+                      `Proceed to ${selectedPaymentMethod === 'card' ? 'Card' : selectedPaymentMethod === 'crypto' ? 'Crypto' : ''} Payment`
+                    )}
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSelectedPaymentMethod('crypto');
+                    handleProceedToPayment();
+                  }}
+                  className="w-full bg-cyan-400 hover:bg-cyan-500 text-black font-bold py-4 rounded-xl transition-all duration-300 hover:scale-105"
+                >
+                  Proceed to Crypto Payment
+                </button>
+              )}
             </div>
           </div>
         </div>

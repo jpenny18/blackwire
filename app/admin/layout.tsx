@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { auth, onAuthStateChanged, signOut, type User } from '@/lib/firebase';
-import { LayoutDashboard, LogOut } from 'lucide-react';
+import { LayoutDashboard, LogOut, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminLayout({
@@ -117,6 +117,17 @@ export default function AdminLayout({
             >
               <LayoutDashboard size={20} />
               <span className="font-medium">Crypto Orders</span>
+            </Link>
+            <Link
+              href="/admin/card-orders"
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                pathname === '/admin/card-orders'
+                  ? 'bg-cyan-400/10 text-cyan-400'
+                  : 'text-gray-400 hover:bg-[#151515] hover:text-white'
+              }`}
+            >
+              <CreditCard size={20} />
+              <span className="font-medium">Card Orders</span>
             </Link>
           </nav>
         </aside>
